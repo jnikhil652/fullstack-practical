@@ -30,7 +30,7 @@ class AuthController {
                 if (user.password !== (0, md5_1.default)(password)) {
                     return res.status(401).send({ msg: "Password or Username incorrect" });
                 }
-                const token = jsonwebtoken_1.default.sign({ user }, process.env.JWT_SECRET);
+                const token = jsonwebtoken_1.default.sign({ id: user.id }, process.env.JWT_SECRET);
                 return res.send({ msg: "login successful", token });
             }
             catch (error) {
@@ -69,8 +69,16 @@ class AuthController {
                     where: {
                         id: user.id,
                     },
+                    select: {
+                        id: true,
+                        email: true,
+                        name: true,
+                        type: true,
+                        departmentId: true,
+                        is_delete: true,
+                        department: true,
+                    },
                 });
-                console.log({ data });
                 return res.json({ msg: "request successful", data });
             }
             catch (error) {

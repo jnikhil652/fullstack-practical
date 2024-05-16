@@ -20,11 +20,11 @@ const Signup = () => {
       const token = response.data?.token;
       Cookies.set(SESSION_COOKIE, token);
       console.log({ response });
+
+      window.location.reload();
     } catch (error) {
       alert("Something went wrong! Try agin");
     }
-
-    // window.location.reload();
   };
   return (
     <main className="w-full h-screen flex flex-col items-center justify-center px-4">

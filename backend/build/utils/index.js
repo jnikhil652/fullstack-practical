@@ -14,6 +14,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.managerMiddleWare = exports.middleWare = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const db_1 = __importDefault(require("./db"));
+const lodash_1 = require("lodash");
 const middleWare = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     try {
@@ -34,9 +36,13 @@ const middleWare = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
 exports.middleWare = middleWare;
 const managerMiddleWare = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const user = req.user;
-        console.log({ user });
-        if (user.type !== "MANAGER") {
+        const userPayload = req.user;
+        const user = yield db_1.default.user.findFirst({
+            where: {
+                id: userPayload.id,
+            },
+        });
+        if ((0, lodash_1.isEmpty)(user) || user.type !== "MANAGER") {
             return res.status(403).send("Unauthorised access");
         }
         next();

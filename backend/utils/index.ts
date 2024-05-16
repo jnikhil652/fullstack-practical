@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import Jwt, { JwtPayload, Secret } from "jsonwebtoken";
+import prisma from "./db";
+import { isEmpty } from "lodash";
 
 export interface CustomRequest extends Request {
   user: string | JwtPayload;
@@ -32,10 +34,14 @@ export const managerMiddleWare = async (
   next: NextFunction
 ) => {
   try {
-    const user = (req as CustomRequest).user as JwtPayload;
-    console.log({ user });
+    const userPayload = (req as CustomRequest).user as JwtPayload;
+    const user = await prisma.user.findFirst({
+      where: {
+        id: userPayload.id,
+      },
+    });
 
-    if (user.type !== "MANAGER") {
+    if (isEmpty(user) || user.type !== "MANAGER") {
       return res.status(403).send("Unauthorised access");
     }
     next();

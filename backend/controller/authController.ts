@@ -4,7 +4,11 @@ import { isEmpty } from "lodash";
 import md5 from "md5";
 import prisma from "../utils/db";
 import { CustomRequest } from "../utils";
+import { User } from "@prisma/client";
 
+interface UserWithOptionalPassword extends User {
+  password: string;
+}
 export default class AuthController {
   static async login(req: Request, res: Response) {
     try {
@@ -19,7 +23,7 @@ export default class AuthController {
         return res.status(401).send({ msg: "Password or Username incorrect" });
       }
       const token: string = jwt.sign(
-        { user },
+        { id: user.id },
         process.env.JWT_SECRET as string
       );
       return res.send({ msg: "login successful", token });
@@ -52,6 +56,7 @@ export default class AuthController {
       return res.status(500).send({ msg: "SOMETHING WENT WRONG!" });
     }
   }
+
   static async me(req: CustomRequest, res: Response) {
     try {
       const user: any = req.user;
@@ -59,8 +64,16 @@ export default class AuthController {
         where: {
           id: user.id,
         },
+        select: {
+          id: true,
+          email: true,
+          name: true,
+          type: true,
+          departmentId: true,
+          is_delete: true,
+          department: true,
+        },
       });
-      console.log({ data });
 
       return res.json({ msg: "request successful", data });
     } catch (error) {
