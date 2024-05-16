@@ -22,7 +22,7 @@ const middleWare = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
         const token = (_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.split(" ")[1];
         if (token) {
             const data = yield jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET);
-            req.user = data === null || data === void 0 ? void 0 : data.user;
+            req.user = data === null || data === void 0 ? void 0 : data.id;
             next();
         }
         else {

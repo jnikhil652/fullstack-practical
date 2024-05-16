@@ -64,10 +64,10 @@ class AuthController {
     static me(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const user = req.user;
+                const id = req.user;
                 const data = yield db_1.default.user.findFirst({
                     where: {
-                        id: user.id,
+                        id,
                     },
                     select: {
                         id: true,
@@ -90,10 +90,10 @@ class AuthController {
     static manager(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const user = req.user;
+                const id = req.user;
                 const data = yield db_1.default.user.update({
                     where: {
-                        id: user.id,
+                        id,
                     },
                     data: {
                         type: "MANAGER",

@@ -18,7 +18,7 @@ export const middleWare = async (
         token,
         process.env.JWT_SECRET as Secret
       );
-      (req as CustomRequest).user = data?.user;
+      (req as CustomRequest).user = data?.id;
       next();
     } else {
       return res.status(401).send("Unauthorised access");
@@ -35,6 +35,7 @@ export const managerMiddleWare = async (
 ) => {
   try {
     const userPayload = (req as CustomRequest).user as JwtPayload;
+
     const user = await prisma.user.findFirst({
       where: {
         id: userPayload.id,

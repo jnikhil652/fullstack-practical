@@ -59,10 +59,11 @@ export default class AuthController {
 
   static async me(req: CustomRequest, res: Response) {
     try {
-      const user: any = req.user;
+      const id: any = req.user;
+
       const data = await prisma.user.findFirst({
         where: {
-          id: user.id,
+          id,
         },
         select: {
           id: true,
@@ -83,10 +84,10 @@ export default class AuthController {
   }
   static async manager(req: CustomRequest, res: Response) {
     try {
-      const user: any = req.user;
+      const id: any = req.user;
       const data = await prisma.user.update({
         where: {
-          id: user.id,
+          id,
         },
         data: {
           type: "MANAGER",

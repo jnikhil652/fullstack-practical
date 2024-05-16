@@ -41,6 +41,7 @@ const Employee = (props: { user: any }) => {
           },
         }
       );
+      window.location.reload();
     } catch (error) {
       alert("Something went wrong! Try agin");
     }
